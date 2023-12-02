@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/lusingander/kasane.svg)](https://pkg.go.dev/github.com/lusingander/kasane)
+
 # kasane
 
 String overlay library for Go
