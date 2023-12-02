@@ -19,6 +19,7 @@ func new() *k {
 	}
 }
 
+// OverlayString returns a string with the s string overlaid on the base string.
 func OverlayString(base, s string, top, left int, opts ...Option) string {
 	k := new()
 	for _, opt := range opts {

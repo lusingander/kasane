@@ -6,6 +6,21 @@ import (
 	"testing"
 )
 
+func ExampleOverlayString() {
+	base := ".......\n.......\n.......\n.......\n......."
+	s := "xxx\nyyy\nzzz"
+
+	out := OverlayString(base, s, 1, 3)
+	fmt.Println(out)
+
+	// Output:
+	// .......
+	// ...xxx.
+	// ...yyy.
+	// ...zzz.
+	// .......
+}
+
 func TestOverlayString(t *testing.T) {
 	tests := []struct {
 		base, s   string
