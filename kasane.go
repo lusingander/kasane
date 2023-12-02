@@ -31,7 +31,7 @@ func OverlayString(base, s string, top, left int, opts ...Option) string {
 	ret := make([]string, 0)
 	for i, b := range bs {
 		if top <= i && i < top+len(ss) {
-			ret = append(ret, k.overlaySingleLineString(b, ss[i-top], left, opts...))
+			ret = append(ret, k.overlaySingleLineString(b, ss[i-top], left))
 		} else {
 			ret = append(ret, b)
 		}
@@ -40,7 +40,7 @@ func OverlayString(base, s string, top, left int, opts ...Option) string {
 	return strings.Join(ret, "\n")
 }
 
-func (k *k) overlaySingleLineString(base, s string, left int, opts ...Option) string {
+func (k *k) overlaySingleLineString(base, s string, left int) string {
 
 	baseCells := k.toCells(base)
 	sCells := k.toCells(s)
