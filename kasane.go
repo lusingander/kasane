@@ -11,11 +11,22 @@ type Option func(*k)
 
 type k struct {
 	rc *runewidth.Condition
+
+	w int
 }
 
 func new() *k {
 	return &k{
 		rc: runewidth.NewCondition(),
+		w:  0,
+	}
+}
+
+// WithPadding sets the padding width.
+// Lines shorter than w are processed with spaces appended.
+func WithPadding(w int) Option {
+	return func(k *k) {
+		k.w = w
 	}
 }
 
@@ -30,6 +41,13 @@ func OverlayString(base, s string, top, left int, opts ...Option) string {
 	ss := strings.Split(s, "\n")
 	ret := make([]string, 0)
 	for i, b := range bs {
+		if k.w > 0 {
+			w := k.stringWidth(b)
+			pad := k.w - w
+			if pad > 0 {
+				b = b + strings.Repeat(" ", pad)
+			}
+		}
 		if top <= i && i < top+len(ss) {
 			ret = append(ret, k.overlaySingleLineString(b, ss[i-top], left))
 		} else {

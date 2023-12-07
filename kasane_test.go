@@ -201,12 +201,73 @@ func TestOverlayString(t *testing.T) {
 	}
 }
 
+func TestOverlayString_WithPadding(t *testing.T) {
+	tests := []struct {
+		base, s   string
+		top, left int
+		pad       int
+		want      string
+	}{
+		{
+			base: join(
+				"aa",
+				"bbb",
+				"cccc",
+				"ddddd",
+			),
+			s: join(
+				"xx",
+				"yy",
+				"z",
+			),
+			top:  1,
+			left: 3,
+			pad:  5,
+			want: join(
+				"aa   ",
+				"bbbxx",
+				"cccyy",
+				"dddzd",
+			),
+		},
+		{
+			base: join(
+				"...",
+				"....",
+				".....",
+				".....",
+				"....",
+			),
+			s: join(
+				"xxx",
+				"y",
+				"zzz",
+			),
+			top:  1,
+			left: 1,
+			pad:  4,
+			want: join(
+				"... ",
+				".xxx",
+				".y...",
+				".zzz.",
+				"....",
+			),
+		},
+	}
+	for i, test := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			testOverlayString(t, test.base, test.s, test.top, test.left, test.want, WithPadding(test.pad))
+		})
+	}
+}
+
 func join(ss ...string) string {
 	return strings.Join(ss, "\n")
 }
 
-func testOverlayString(t *testing.T, base, s string, top, left int, want string) {
-	got := OverlayString(base, s, top, left)
+func testOverlayString(t *testing.T, base, s string, top, left int, want string, opts ...Option) {
+	got := OverlayString(base, s, top, left, opts...)
 	t.Logf("base string:\n%s", base)
 	t.Logf("s string:\n%s", s)
 	t.Logf("got string:\n%s", got)
