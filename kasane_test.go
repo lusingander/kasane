@@ -21,6 +21,36 @@ func ExampleOverlayString() {
 	// .......
 }
 
+func BenchmarkOverlayString_1(b *testing.B) {
+	base := ".......\n.......\n.......\n.......\n......."
+	s := "xxx\nyyy\nzzz"
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = OverlayString(base, s, 1, 3)
+	}
+}
+
+func BenchmarkOverlayString_2(b *testing.B) {
+	baseLine := strings.Repeat(".", 1000)
+	base1 := fmt.Sprintf("\x1b[31m%s\x1b[0m\n", baseLine)
+	base2 := fmt.Sprintf("\x1b[32m%s\x1b[0m\n", baseLine)
+	base3 := fmt.Sprintf("\x1b[33m%s\x1b[0m\n", baseLine)
+	base4 := fmt.Sprintf("\x1b[34m%s\x1b[0m\n", baseLine)
+	base := strings.Repeat(base1+base2+base3+base4, 100)
+
+	sLine := strings.Repeat("x", 100)
+	s1 := fmt.Sprintf("\x1b[41m%s\x1b[0m\n", sLine)
+	s2 := fmt.Sprintf("\x1b[42m%s\x1b[0m\n", sLine)
+	s3 := fmt.Sprintf("\x1b[43m%s\x1b[0m\n", sLine)
+	s := strings.Repeat(s1+s2+s3, 50)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = OverlayString(base, s, 20, 30)
+	}
+}
+
 func TestOverlayString(t *testing.T) {
 	tests := []struct {
 		base, s   string
